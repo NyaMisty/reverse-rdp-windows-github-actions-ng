@@ -1,0 +1,41 @@
+name: 'Reverse RDP with ngrok'
+inputs:
+  ngrok-token:
+    required: true
+  password:
+    required: false
+    default: "P@ssw0rd!"
+runs:
+  using: "composite"
+  steps:
+  - name: Download
+    run: |
+      echo "Download..."; Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+    shell: pwsh
+  - name: Extract
+    run: |
+      echo "Extract..."; Expand-Archive ngrok.zip
+    shell: pwsh
+  - name: Auth
+    run: |
+      echo "Ngrok auth"; .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+    env:
+      NGROK_AUTH_TOKEN: ${{ inputs.ngrok-token }}
+    shell: powershell
+  - name: Enable TS
+    run: |
+      echo "Enable TS"; Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    shell: pwsh
+  - run: |
+      echo "Enable firewall"; Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    shell: pwsh
+  - run: |
+      echo "Enable RDP auth"; Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    shell: pwsh
+  - run: |
+      echo "Setup user password"; Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "${{ inputs.password }}" -Force)
+    shell: pwsh
+  - name: Create Tunnel
+    run: |
+      echo "Create Tunnel"; .\ngrok\ngrok.exe tcp 3389
+    shell: pwsh

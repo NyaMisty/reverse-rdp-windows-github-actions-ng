@@ -1,0 +1,16 @@
+name: Action Test
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: NyaMisty/reverse-rdp-windows-github-actions@master
+      with:
+        ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
+        password: Aa123456
+      
+    
