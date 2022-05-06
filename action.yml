@@ -12,5 +12,5 @@ inputs:
 
 runs:
   using: 'node16'
-  main: 'dist/index.js'
-  main: 'dist/post.js'
+  main: 'dist/start_rdp/index.js'
+  post: 'dist/wait_rdp/index.js'

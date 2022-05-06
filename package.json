@@ -1,29 +1,24 @@
 {
-  "name": "javascript-action",
+  "name": "reverse-rdp-windows-github-actions",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
-  "main": "index.js",
+  "description": "Debugging using Reverse RDP with ngrok",
+  "main": "dist/start_rdp/index.js",
+  "private": true,
   "scripts": {
-    "lint": "eslint .",
-    "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
+    "lint": "eslint src",
+    "build:main": "ncc build src/start_rdp.js -o dist/start_rdp --source-map --license licenses.txt",
+    "build:post": "ncc build src/wait_rdp.js -o dist/wait_rdp --source-map --license licenses.txt",
+    "prepare": "npm run build:main && npm run build:post",
     "test": "jest",
-    "all": "npm run lint && npm run prepare && npm run test"
+    "all": "npm run lint && npm run prepare"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "https://github.com/NyaMisty/reverse-rdp-windows-github-actions-ng.git"
   },
-  "keywords": [
-    "GitHub",
-    "Actions",
-    "JavaScript"
-  ],
-  "author": "",
+  "author": "NyaMisty",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
-  },
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/NyaMisty/reverse-rdp-windows-github-actions-ng",
   "dependencies": {
     "@actions/core": "^1.2.5"
   },
