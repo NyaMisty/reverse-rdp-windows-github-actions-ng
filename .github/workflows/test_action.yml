@@ -1,0 +1,33 @@
+name: Action Test
+
+on: 
+  workflow_dispatch:
+    inputs:
+      unk:
+        description: 'stub input'
+        required: false
+        default: false
+
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Test foreground
+      uses: NyaMisty/reverse-rdp-windows-github-actions@master
+      with:
+        ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
+        password: Aa123456
+    - name: Test background
+      uses: NyaMisty/reverse-rdp-windows-github-actions@master
+      with:
+        ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
+        password: Aa123456
+    - name: Test foreground
+      uses: NyaMisty/reverse-rdp-windows-github-actions@master
+      with:
+        ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
+        password: Aa123456
+      
+    
