@@ -5,6 +5,10 @@ inputs:
   password:
     required: false
     default: "P@ssw0rd!"
+  foreground:
+    required: false
+    default: true
+  
 runs:
   using: "composite"
   steps:
@@ -35,7 +39,14 @@ runs:
   - run: |
       echo "Setup user password"; Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "${{ inputs.password }}" -Force)
     shell: pwsh
-  - name: Create Tunnel
+  - name: Create Foreground Tunnel
+    if: ${{ inputs.foreground == 'true' }}
     run: |
-      echo "Create Tunnel"; .\ngrok\ngrok.exe tcp 3389
+      echo "Create Foreground Tunnel"; .\ngrok\ngrok.exe tcp 3389
     shell: pwsh
+  - name: Create Non-Foreground Tunnel
+    if: ${{ inputs.foreground != 'false' }}
+    run: |
+      @echo Create Non-Foreground Tunnel
+      start .\ngrok\ngrok.exe tcp 3389
+    shell: cmd
